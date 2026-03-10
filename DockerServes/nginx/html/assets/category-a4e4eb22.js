@@ -1,0 +1,1 @@
+import{s as e}from"./index-296c06b5.js";function o(t){return e({url:"/sys/category/list",method:"get",params:t})}function s(t){return e({url:"/sys/category",method:"post",data:t})}function a(t){return e({url:"/sys/category",method:"put",data:t})}function u(t){return e({url:`/sys/category/delete/${t}`,method:"delete"})}export{s as a,u as d,o as g,a as u};

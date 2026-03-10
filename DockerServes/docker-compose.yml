@@ -1,0 +1,76 @@
+version: '3.3'
+services:
+  mysql:
+    image: mysql:8.0.32
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data/mysql:/var/lib/mysql
+      - ./mysql/conf/conf.d:/etc/mysql/conf.d
+    networks:
+      iotdb:
+        ipv4_address: 172.20.0.2
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      iotdb:
+        ipv4_address: 172.20.0.3
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    container_name: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      - "15675:15675"
+    volumes:
+      - ./rabbitmq/data:/var/lib/rabbitmq
+      - ./rabbitmq/plugins:/plugins
+    networks:
+      iotdb:
+        ipv4_address: 172.20.0.4
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "9000:9000"
+      - "9001:9001"
+      - "9002:9002"
+      - "443:443"
+    volumes:
+      - ./nginx/conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/logs:/var/log/nginx
+      - ./nginx/html:/usr/share/nginx/html
+    networks:
+      iotdb:
+        ipv4_address: 172.20.0.5
+  myapp:
+    image: myapp:latest 
+    container_name: myapp
+   # restart: always
+    ports:
+      - "8800:8800"
+    volumes:
+      - /home/DockerServes/java/upload/:/app/upload
+    networks:
+      iotdb:
+        ipv4_address: 172.20.0.11
+
+networks:
+  iotdb:
+    external: true

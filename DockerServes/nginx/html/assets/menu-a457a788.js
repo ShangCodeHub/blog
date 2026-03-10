@@ -1,0 +1,1 @@
+import{s as t}from"./index-296c06b5.js";function n(){return t({url:"/sys/menu/tree",method:"get"})}function r(e){return t({url:"/sys/menu",method:"post",data:e})}function s(e){return t({url:"/sys/menu/",method:"put",data:e})}function o(e){return t({url:`/sys/menu/${e}`,method:"delete"})}export{r as c,o as d,n as g,s as u};

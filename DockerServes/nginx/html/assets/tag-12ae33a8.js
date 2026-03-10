@@ -1,0 +1,1 @@
+import{s as e}from"./index-296c06b5.js";function a(t){return e({url:"/sys/tag/list",method:"get",params:t})}function r(t){return e({url:"/sys/tag",method:"post",data:t})}function u(t){return e({url:"/sys/tag",method:"put",data:t})}function i(t){return e({url:`/sys/tag/delete/${t}`,method:"delete"})}export{r as a,i as d,a as g,u};

@@ -1,0 +1,161 @@
+#!/bin/bash
+
+echo "Starting initialization of all service volumes..."
+
+# 创建必要的目录
+echo "Creating directories..."
+mkdir -p java/upload
+mkdir -p mysql/data mysql/conf/conf.d/ mysql/logs
+mkdir -p redis/data redis/conf
+mkdir -p rabbitmq/data rabbitmq/plugins
+mkdir -p nginx/conf nginx/conf.d nginx/logs nginx/html
+mkdir -p logs
+
+# 检查 Docker 是否已安装
+if ! command -v docker &> /dev/null; then
+    echo "Docker is not installed. Please install Docker first."
+    exit 1
+fi
+
+# MySQL 初始化
+echo "Initializing MySQL..."
+docker run -d --name temp-mysql \
+    -e MYSQL_ROOT_PASSWORD=root123 \
+    -e MYSQL_DATABASE=mydb \
+    mysql:8.0.32
+echo "Waiting for MySQL to initialize..."
+sleep 10
+docker cp temp-mysql:/var/lib/mysql/. mysql/data/
+docker cp temp-mysql:/etc/mysql/. mysql/conf/
+
+# 创建 MySQL 配置文件
+echo "Creating MySQL configuration..."
+cat > mysql/conf/my.cnf << 'EOF'
+[mysqld]
+# 字符集设置
+character-set-server=utf8mb4
+collation-server=utf8mb4_unicode_ci
+init_connect='SET NAMES utf8mb4'
+
+# 远程访问设置
+bind-address=0.0.0.0
+
+# 连接数设置
+max_connections=1000
+max_user_connections=500
+
+# SQL模式设置（移除ONLY_FULL_GROUP_BY）
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION
+
+# 性能优化
+innodb_buffer_pool_size=1G
+innodb_log_buffer_size=16M
+innodb_log_file_size=256M
+innodb_write_io_threads=8
+innodb_read_io_threads=8
+
+# 时区设置
+default-time-zone='+8:00'
+
+# 日志设置
+slow_query_log=1
+slow_query_log_file=/var/log/mysql/mysql-slow.log
+long_query_time=2
+
+# 安全设置
+max_allowed_packet=16M
+
+[client]
+default-character-set=utf8mb4
+
+[mysql]
+default-character-set=utf8mb4
+EOF
+
+docker rm -f temp-mysql
+
+# Redis 初始化
+echo "Initializing Redis..."
+docker run -d --name temp-redis redis:7-alpine
+sleep 5
+docker cp temp-redis:/data/. redis/data/
+
+# 创建 Redis 配置文件
+echo "Creating Redis configuration..."
+cat > redis/conf/redis.conf << 'EOF'
+bind 0.0.0.0
+protected-mode no
+port 6379
+tcp-backlog 511
+timeout 0
+tcp-keepalive 300
+daemonize no
+supervised no
+pidfile /var/run/redis_6379.pid
+loglevel notice
+logfile ""
+databases 16
+always-show-logo yes
+save 900 1
+save 300 10
+save 60 10000
+stop-writes-on-bgsave-error yes
+rdbcompression yes
+rdbchecksum yes
+dbfilename dump.rdb
+dir ./
+replica-serve-stale-data yes
+replica-read-only yes
+repl-diskless-sync no
+repl-diskless-sync-delay 5
+repl-disable-tcp-nodelay no
+replica-priority 100
+maxmemory 1gb
+maxmemory-policy allkeys-lru
+lazyfree-lazy-eviction no
+lazyfree-lazy-expire no
+lazyfree-lazy-server-del no
+replica-lazy-flush no
+appendonly no
+appendfilename "appendonly.aof"
+appendfsync everysec
+no-appendfsync-on-rewrite no
+auto-aof-rewrite-percentage 100
+auto-aof-rewrite-min-size 64mb
+aof-load-truncated yes
+aof-use-rdb-preamble yes
+EOF
+
+docker rm -f temp-redis
+
+# Nginx 初始化
+echo "Initializing Nginx..."
+docker run -d --name temp-nginx nginx:alpine
+sleep 5
+docker cp temp-nginx:/etc/nginx/. nginx/conf/
+docker cp temp-nginx:/etc/nginx/conf.d/. nginx/conf.d/
+docker cp temp-nginx:/usr/share/nginx/html/. nginx/html/
+docker cp temp-nginx:/var/log/nginx/. nginx/logs/
+docker rm -f temp-nginx
+
+# RabbitMQ 初始化
+echo "Initializing RabbitMQ..."
+docker run -d --name temp-rabbitmq \
+    -e RABBITMQ_DEFAULT_USER=admin \
+    -e RABBITMQ_DEFAULT_PASS=admin \
+    rabbitmq:3.8-management
+sleep 10
+docker cp temp-rabbitmq:/var/lib/rabbitmq/. rabbitmq/data/
+docker cp temp-rabbitmq:/plugins/. rabbitmq/plugins/
+docker rm -f temp-rabbitmq
+
+# 创建上传目录（不依赖镜像）
+echo "Creating upload directory..."
+mkdir -p java/upload
+
+# 创建 Docker 网络
+echo "Creating Docker network..."
+docker network create --driver=bridge --subnet=172.20.0.0/16 --gateway=172.20.0.1 iotdb 2>/dev/null || echo "Network already exists"
+
+echo "All volumes have been initialized!"
+echo "You can now start the services using docker-compose up -d"

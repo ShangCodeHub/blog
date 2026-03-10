@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon"  href="%VITE_APP_LOGO%" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="keywords" content="%VITE_APP_KEYWORDS%" />
+    <meta
+      name="description"
+      content="%VITE_APP_DESCRIPTION%"
+    />
+    <title>%VITE_APP_TITLE%</title>
+    <script src="https://img.shiyit.com/base/mojian/index.js"></script>
+
+
+    <script>
+      var _hmt = _hmt || [];
+      (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?725f624fdb6a307fa04e422db6d078fd";
+        var s = document.getElementsByTagName("script")[0]; 
+        s.parentNode.insertBefore(hm, s);
+      })();
+      </script>
+      
+    <!-- Dify Chatbot - 已替换为自定义 AI 聊天窗口 -->
+    <!-- 
+    <script>
+     window.difyChatbotConfig = {
+      token: 'o1KcQs7zblMKsAUU',
+      baseUrl: 'http://117.72.116.118',
+      inputs: {},
+      systemVariables: {},
+      userVariables: {},
+     }
+    </script>
+    <script
+     src="http://117.72.116.118/embed.min.js"
+     id="o1KcQs7zblMKsAUU"
+     defer>
+    </script>
+    -->
+    <style>
+      /* 隐藏 Dify chatbot 按钮（如果脚本仍然加载） */
+      #dify-chatbot-bubble-button,
+      #dify-chatbot-bubble-window,
+      [id^="dify-chatbot"] {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    </style>
+      
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html> 

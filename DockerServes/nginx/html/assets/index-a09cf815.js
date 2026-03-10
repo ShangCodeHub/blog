@@ -1,0 +1,1 @@
+import{a as c,B as i,C as u,ad as p,b as m,c as d}from"./vendor-3ed22b84.js";import{u as _}from"./tagsView-596ff166.js";const B=c({__name:"index",setup(f){const t=i(),s=u(),a=_();return p(()=>{const{params:o,query:r}=t,{path:e}=o,n="/"+(Array.isArray(e)?e.join("/"):e);a.delVisitedView(t),s.replace({path:n,query:r})}),(o,r)=>(m(),d("div"))}});export{B as default};
