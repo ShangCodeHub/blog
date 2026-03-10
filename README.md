@@ -1,162 +1,354 @@
-## 博客介绍
+# Shang Blog - 上博客
 
-<p align=center>
-  <a href="http://www.shiyit.com" style="border-radius: 50%;width: 100px;height: 100px">
-    <img src="logo.ico" alt="Shang博客" >
-  </a>
+<p align="center">
+  <b>一个现代化的全栈博客平台</b><br>
+  <b>A Modern Full-Stack Blog Platform</b><br>
+  <b>モダンなフルスタックブログプラットフォーム</b>
 </p>
 
 <p align="center">
-   <a target="_blank" href="https://github.com/X1192176811/blog">
-      <img src="https://img.shields.io/hexpm/l/plug.svg"/>
-      <img src="https://img.shields.io/badge/JDK-1.8+-green.svg"/>
-      <img src="https://img.shields.io/badge/springboot-2.4.1.RELEASE-green"/>
-      <img src="https://img.shields.io/badge/vue-2.5.17-green"/>
-      <img src="https://img.shields.io/badge/mysql-5.5.0-green"/>
-      <img src="https://img.shields.io/badge/mybatis--plus-3.4.0-green"/>
-      <img src="https://img.shields.io/badge/redis-6.0.5-green"/>
-      <img src="https://img.shields.io/badge/elasticsearch-7.9.2-green"/>
-   </a>
+  <a href="#-中文">中文</a> |
+  <a href="#-english">English</a> |
+  <a href="#-日本語">日本語</a>
 </p>
 
-[在线地址](#在线地址) | [目录结构](#目录结构) | [项目特点](#项目特点) | [技术介绍](#技术介绍) | [运行环境](#运行环境)
+---
 
+## 🇨🇳 中文
 
-## 在线地址
+### 📖 项目介绍
 
-**项目链接：** [Shang博客](http://www.shiyit.com)
+**上博客 (Shang Blog)** 是一个功能丰富的全栈博客平台，采用前后端分离架构，支持多端访问。项目包含用户端、管理后台和小程序/APP，满足不同场景的需求。
 
-## 站点演示地址
-**后台链接：** [Shang博客后台管理系统](https://admin.shiyit.com/#/login)
+### 🚀 技术栈
 
-账号:test 密码:123456
+#### 后端 (blog/)
+| 技术 | 版本 | 说明 |
+|------|------|------|
+| Spring Boot | 2.7.0 | 核心框架 |
+| Java | 8 | 编程语言 |
+| MyBatis-Plus | - | ORM 框架 |
+| Sa-Token | - | 权限认证 |
+| MySQL | 8.0 | 数据库 |
+| Redis | 7 | 缓存 |
+| RabbitMQ | - | 消息队列 |
+| Quartz | - | 定时任务 |
+| Dify API | - | AI 集成 |
 
-**Gitee地址：** [https  ://gitee.com/quequnlong/shiyi-blog](https://gitee.com/quequnlong/shiyi-blog)
+#### 前端
+| 项目 | 技术栈 | 说明 |
+|------|--------|------|
+| blog-web | Vue 2.7 + Vite | 用户门户网站 |
+| blog-admin | Vue 3.2 + Element Plus | 管理后台 |
+| uniapp-blog | UniApp | 移动端小程序/APP |
 
-您的star是我坚持的动力，感谢大家的支持，欢迎提交pr共同改进项目。
-
-## 目录结构
-
-前端项目blog-web为前台，blog-admin为后台。
-
-后端项目位于blog下。
-
-SQL文件位于根目录下的 mj-blog.sql
-
-可直接导入该项目于本地，修改后端配置文件中的数据库等连接信息，项目中使用到的关于七牛云功能和第三方授权登录等需要自行开通。
-
-当你克隆项目到本地后可使用账号：admin，密码：123456 进行登录
-
-本地访问接口文档地址：http://127.0.0.1:8800/shiyi/doc.html
-
-**ps：请先运行后端项目，再启动前端项目，前端项目配置由后端动态加载。**
-
-```
-blog
-├── mojian-admin    --  后台管理系统的controller模块
-├── mojian-common        --  通用模块
-├── mojian-auth        --  认证模块
-├── mojian-file        --  文件模块
-├── mojian-quartz        --  定时任务模块
-├── mojian-server        --  博客启动类模块
-├── mojian-api           --  门户接口模块
+### 📁 项目结构
 
 ```
-- 
+shang/
+├── blog/                   # 后端项目
+│   ├── shang-server/      # 入口模块
+│   ├── shang-api/         # 门户 API
+│   ├── shang-admin/       # 管理 API
+│   ├── shang-auth/        # 认证模块
+│   ├── shang-common/      # 公共模块
+│   ├── shang-file/        # 文件存储
+│   ├── shang-quartz/      # 定时任务
+│   └── Shang-AiMode/      # AI 模块
+├── blog-web/              # 前端用户端
+├── blog-admin/            # 前端管理后台
+├── uniapp-blog/           # 移动端
+├── docker/                # Docker 部署配置
+└── shang-blog.sql         # 数据库初始化脚本
+```
 
-## 项目截图
+### 🔧 快速开始
 
-**门户**
-![statics/img0.png](/statics/img0.png) ![statics/img.png](/statics/img.png)
+#### 本地开发
 
+1. **启动数据库**
+```bash
+docker-compose up -d mysql redis
+```
 
-![statics/img_1.png](/statics/img_1.png) ![statics/img_2.png](/statics/img_2.png)
+2. **运行后端**
+```bash
+cd blog
+mvn clean install -DskipTests
+cd shang-server
+mvn spring-boot:run
+```
 
+3. **运行前端**
+```bash
+# 用户端
+cd blog-web
+npm install
+npm run dev
 
-![statics/img_3.png](/statics/img_3.png) ![img.png](/statics/login.png)
+# 管理后台
+cd blog-admin
+npm install
+npm run dev
+```
 
-![img.png](/statics/about.png)
+#### Docker 一键部署
 
-**管理系统**
-![statics/img_4.png](/statics/img_4.png)  ![statics/img_5.png](/statics/img_5.png)
+```bash
+cd docker
+./deploy.sh  # Linux/Mac
+deploy.bat     # Windows
+```
 
-![statics/img_6.png](/statics/img_6.png)  ![statics/img_7.png](/statics/img_7.png)
+访问地址：
+- 博客前台：http://localhost:9001
+- 管理后台：http://localhost:9003
+- API 文档：http://localhost:8800/shiyi/doc.html
 
-![statics/img_8.png](/statics/img_8.png)  ![statics/img_9.png](/statics/img_9.png)
+### ✨ 核心功能
 
-![statics/img_10.png](/statics/img_10.png)  ![statics/img_11.png](/statics/img_11.png)
+- 📝 Markdown 编辑器支持
+- 🎨 自定义主题
+- 🔍 全文搜索
+- 💬 评论系统
+- 📊 数据统计面板
+- 🤖 AI 智能助手
+- 🔐 多平台 OAuth 登录 (QQ/微博/Gitee/GitHub)
+- 📱 响应式设计
+- 🌙 暗黑模式
 
-![statics/img_12.png](/statics/img_12.png)  ![statics/img_13.png](/statics/img_13.png)
+---
 
-![statics/img_14.png](/statics/img_14.png)  ![statics/img_15.png](/statics/img_15.png)
+## 🇺🇸 English
 
-![statics/img_16.png](/statics/img_16.png)  ![statics/img_17.png](/statics/img_17.png)
+### 📖 Introduction
 
-![statics/img_18.png](/statics/img_18.png)  ![statics/img_19.png](/statics/img_19.png)
+**Shang Blog** is a feature-rich full-stack blog platform with a decoupled architecture, supporting multi-terminal access. The project includes a user portal, admin dashboard, and mobile mini-programs/APP to meet various scenario needs.
 
-![statics/img_20.png](/statics/img_20.png)
+### 🚀 Tech Stack
 
+#### Backend (blog/)
+| Technology | Version | Description |
+|------------|---------|-------------|
+| Spring Boot | 2.7.0 | Core Framework |
+| Java | 8 | Programming Language |
+| MyBatis-Plus | - | ORM Framework |
+| Sa-Token | - | Authentication |
+| MySQL | 8.0 | Database |
+| Redis | 7 | Cache |
+| RabbitMQ | - | Message Queue |
+| Quartz | - | Job Scheduler |
+| Dify API | - | AI Integration |
 
-## 技术介绍
+#### Frontend
+| Project | Tech Stack | Description |
+|---------|------------|-------------|
+| blog-web | Vue 2.7 + Vite | User Portal |
+| blog-admin | Vue 3.2 + Element Plus | Admin Dashboard |
+| uniapp-blog | UniApp | Mobile Mini-programs/APP |
 
-**门户-前端：** vue2.0 +  Vuex + vue-router + axios + elementUi
+### 📁 Project Structure
 
-**管理系统-前端：** vue3.0 +  pinia + vue-router + axios + element-plus + echarts
+```
+shang/
+├── blog/                   # Backend Project
+│   ├── shang-server/      # Entry Module
+│   ├── shang-api/         # Portal API
+│   ├── shang-admin/       # Admin API
+│   ├── shang-auth/        # Auth Module
+│   ├── shang-common/      # Common Module
+│   ├── shang-file/        # File Storage
+│   ├── shang-quartz/      # Scheduled Jobs
+│   └── Shang-AiMode/      # AI Module
+├── blog-web/              # Web Frontend
+├── blog-admin/            # Admin Frontend
+├── uniapp-blog/           # Mobile App
+├── docker/                # Docker Config
+└── shang-blog.sql         # Database Schema
+```
 
-**后端：** SpringBoot + nginx + docker + sa-token + Swagger2 + MyBatisPlus + Mysql + Redis + elasticsearch
+### 🔧 Quick Start
 
-**其他：** 接入QQ、微博、码云、微信公众号等第三方登录，接入七牛云对象存储
+#### Local Development
 
-## 运行环境
+1. **Start Database**
+```bash
+docker-compose up -d mysql redis
+```
 
-**服务器：** 腾讯云2核4G CentOS7.6
+2. **Run Backend**
+```bash
+cd blog
+mvn clean install -DskipTests
+cd shang-server
+mvn spring-boot:run
+```
 
-**对象存储：** 七牛云OSS
+3. **Run Frontend**
+```bash
+# User Portal
+cd blog-web
+npm install
+npm run dev
 
-**最低配置：** 1核2G服务器（关闭ElasticSearch）
+# Admin Dashboard
+cd blog-admin
+npm install
+npm run dev
+```
 
-## 开发环境
+#### Docker Deployment
 
-|            开发工具            |           说明            |
-| ----------------------------- | ------------------------- |
-| IDEA                          | Java开发工具IDE            |
-| VSCode                        | Vue开发工具IDE             |
-| Navicat                       | MySQL远程连接工具          |
-| Another Redis Desktop Manager | Redis远程连接工具          |
-| finalshell                    | Linux远程连接和文件上传工具 |
+```bash
+cd docker
+./deploy.sh  # Linux/Mac
+deploy.bat     # Windows
+```
 
-|    开发环境    |  版本  |
-| ------------- | ----- |
-| JDK           | 1.8   |
-| MySQL         | 5.5.0 |
-| Redis         | 6.0.5 |
-| Elasticsearch | 7.9.2 |
-|            |      |
-|            |      |
-|            |      |shang-blog
-介绍
-{以下是 Gitee 平台说明，您可以替换此简介 Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台 无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 https://gitee.com/enterprises}
+Access URLs:
+- Blog Portal: http://localhost:9001
+- Admin Dashboard: http://localhost:9003
+- API Docs: http://localhost:8800/shiyi/doc.html
 
-软件架构
-软件架构说明
+### ✨ Key Features
 
-安装教程
-xxxx
-xxxx
-xxxx
-使用说明
-xxxx
-xxxx
-xxxx
-参与贡献
-Fork 本仓库
-新建 Feat_xxx 分支
-提交代码
-新建 Pull Request
-特技
-使用 Readme_XXX.md 来支持不同的语言，例如 Readme_en.md, Readme_zh.md
-Gitee 官方博客 blog.gitee.com
-你可以 https://gitee.com/explore 这个地址来了解 Gitee 上的优秀开源项目
-GVP 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-Gitee 官方提供的使用手册 https://gitee.com/help
-Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 https://gitee.com/gitee-stars/
+- 📝 Markdown Editor Support
+- 🎨 Custom Themes
+- 🔍 Full-Text Search
+- 💬 Comment System
+- 📊 Statistics Dashboard
+- 🤖 AI Smart Assistant
+- 🔐 Multi-Platform OAuth (QQ/Weibo/Gitee/GitHub)
+- 📱 Responsive Design
+- 🌙 Dark Mode
+
+---
+
+## 🇯🇵 日本語
+
+### 📖 プロジェクト紹介
+
+**Shang Blog** は、豊富な機能を持つフルスタックブログプラットフォームです。フロントエンドとバックエンドを分離したアーキテクチャを採用し、複数の端末からアクセスできます。プロジェクトにはユーザーポータル、管理画面、モバイルアプリ/ミニプログラムが含まれています。
+
+### 🚀 技術スタック
+
+#### バックエンド (blog/)
+| 技術 | バージョン | 説明 |
+|------|------------|------|
+| Spring Boot | 2.7.0 | コアフレームワーク |
+| Java | 8 | プログラミング言語 |
+| MyBatis-Plus | - | ORM フレームワーク |
+| Sa-Token | - | 認証認可 |
+| MySQL | 8.0 | データベース |
+| Redis | 7 | キャッシュ |
+| RabbitMQ | - | メッセージキュー |
+| Quartz | - | ジョブスケジューラー |
+| Dify API | - | AI 統合 |
+
+#### フロントエンド
+| プロジェクト | 技術スタック | 説明 |
+|--------------|--------------|------|
+| blog-web | Vue 2.7 + Vite | ユーザーポータル |
+| blog-admin | Vue 3.2 + Element Plus | 管理画面 |
+| uniapp-blog | UniApp | モバイルアプリ |
+
+### 📁 プロジェクト構成
+
+```
+shang/
+├── blog/                   # バックエンドプロジェクト
+│   ├── shang-server/      # エントリーモジュール
+│   ├── shang-api/         # ポータル API
+│   ├── shang-admin/       # 管理 API
+│   ├── shang-auth/        # 認証モジュール
+│   ├── shang-common/      # 共通モジュール
+│   ├── shang-file/        # ファイルストレージ
+│   ├── shang-quartz/      # スケジュールジョブ
+│   └── Shang-AiMode/      # AI モジュール
+├── blog-web/              # Web フロントエンド
+├── blog-admin/            # 管理画面
+├── uniapp-blog/           # モバイルアプリ
+├── docker/                # Docker 設定
+└── shang-blog.sql         # データベーススキーマ
+```
+
+### 🔧 クイックスタート
+
+#### ローカル開発
+
+1. **データベースを起動**
+```bash
+docker-compose up -d mysql redis
+```
+
+2. **バックエンドを実行**
+```bash
+cd blog
+mvn clean install -DskipTests
+cd shang-server
+mvn spring-boot:run
+```
+
+3. **フロントエンドを実行**
+```bash
+# ユーザーポータル
+cd blog-web
+npm install
+npm run dev
+
+# 管理画面
+cd blog-admin
+npm install
+npm run dev
+```
+
+#### Docker デプロイ
+
+```bash
+cd docker
+./deploy.sh  # Linux/Mac
+deploy.bat     # Windows
+```
+
+アクセス URL：
+- ブログポータル：http://localhost:9001
+- 管理画面：http://localhost:9003
+- API ドキュメント：http://localhost:8800/shiyi/doc.html
+
+### ✨ 主要機能
+
+- 📝 Markdown エディタ対応
+- 🎨 カスタムテーマ
+- 🔍 全文検索
+- 💬 コメントシステム
+- 📊 統計ダッシュボード
+- 🤖 AI スマートアシスタント
+- 🔐 多プラットフォーム OAuth (QQ/微博/Gitee/GitHub)
+- 📱 レスポンシブデザイン
+- 🌙 ダークモード
+
+---
+
+## 🐳 Docker Services
+
+| Service | Container Port | Host Port | Description |
+|---------|---------------|-----------|-------------|
+| MySQL | 3306 | 3307 | Database |
+| Redis | 6379 | 6380 | Cache |
+| Backend | 8800 | 8800 | Spring Boot API |
+| Frontend Web | 80 | 9001 | User Portal |
+| Frontend Admin | 80 | 9003 | Admin Dashboard |
+
+## 📄 License
+
+[MIT](LICENSE)
+
+## 👤 Author
+
+Shang
+
+---
+
+<p align="center">
+  <b>Made with ❤️ by Shang</b>
+</p>
